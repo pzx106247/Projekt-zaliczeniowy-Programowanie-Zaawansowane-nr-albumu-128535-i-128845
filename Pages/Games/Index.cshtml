@@ -1,0 +1,49 @@
+@page
+@model Esport.Pages.GamesModel
+
+@{
+    ViewData["Title"] = "Games";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.IsAdmin) {
+    <p>
+        <a href="/Games/Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Genre
+            </th>
+            @if (Model.IsAdmin) {
+                <th></th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Games) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                @if (Model.IsAdmin) {
+                    <td>
+                        <a href="/Games/Edit?id=@item.Id">Edit</a> |
+                        <a href="/Games/Delete?id=@item.Id">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

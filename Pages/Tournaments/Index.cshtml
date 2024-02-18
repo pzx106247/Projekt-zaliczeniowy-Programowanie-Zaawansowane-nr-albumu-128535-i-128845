@@ -1,0 +1,67 @@
+@page
+@model Esport.Pages.TournamentModel
+
+@{
+    ViewData["Title"] = "Tournaments";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (User.Identity is not { IsAuthenticated: true }) {
+    <p>
+        <a href="/Identity/Account/Login?returnUrl=/Tournaments/Create">Login to create new tournament</a>
+    </p>
+} else {
+    <p>
+        <a href="/Tournaments/Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Game
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Owner
+            </th>
+            @if (Model.IsAdmin) {
+                <th>
+                    Approve
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Tournaments) {
+            <tr>
+                <td>
+                    <a href="/Tournaments/Details?id=@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner.UserName)
+                </td>
+                @if (Model.IsAdmin) {
+                    <td>
+                        @if (!item.Approved) {
+                            <a href="/Tournaments/Approve?id=@item.Id">Approve</a>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

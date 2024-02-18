@@ -1,0 +1,83 @@
+@page
+@model Esport.Pages.TournamentDetailsModel
+
+@{
+    ViewData["Title"] = "Tournament Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Name
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Tournament.Name
+        </dd>
+        <dt class = "col-sm-2">
+            Game
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Tournament.Game
+        </dd>
+        <dt class = "col-sm-2">
+            Date
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Tournament.Date
+        </dd>
+        <dt class = "col-sm-2">
+            Owner
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Tournament.Owner
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Participants</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Participants)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Participants)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    @if (User.Identity is not { IsAuthenticated: true }) {
+        <a href="/Identity/Account/Login?returnUrl=/Tournaments/">Login to join</a>
+    } 
+    else if (User.Identity.Name != Model.Tournament.Owner.UserName) {
+        if (Model.Participants.Any(p => p.UserName == User.Identity.Name)) {
+            <a href="/Tournaments/Leave?id=@Model.Tournament.Id">Leave</a>
+            <br/>
+        } else {
+            <a href="/Tournaments/Join?id=@Model.Tournament.Id">Join</a>
+            <br/>
+        }
+    }
+    else {
+        <a href="/Tournaments/Edit?id=@Model.Tournament.Id">Edit</a>
+        <br/>
+        <a href="/Tournaments/Delete?id=@Model.Tournament.Id">Delete</a>
+        <br/>
+    }
+    <a href="/Tournaments/Index">Back to List</a>
+</div>
